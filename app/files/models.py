@@ -63,3 +63,15 @@ class DescriptionFile(models.Model):
 
     def __str__(self):
         return f"{self.file.filename}-{self.title}"
+
+
+class ImageFile(models.Model):
+    description_file = models.ForeignKey(to=DescriptionFile, on_delete=models.CASCADE, related_name='image_file',
+                                         verbose_name='File')
+
+    image = models.ImageField(upload_to='file_image', verbose_name='Изображение')
+
+    class Meta:
+        db_table = 'image_file'
+        verbose_name = 'Изображение'
+        verbose_name_plural = 'Изображения'
