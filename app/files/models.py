@@ -42,3 +42,24 @@ class File(models.Model):
 
     def __str__(self):
         return self.filename
+
+
+class DescriptionFile(models.Model):
+    file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='description_file', verbose_name='File')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
+    title = models.CharField(max_length=300, verbose_name='Заголовок')
+    description = models.TextField(verbose_name='Описание')
+    line_video = models.URLField(verbose_name='Ссылка на видео')
+
+    class Meta:
+        db_table = 'description_file'
+        verbose_name = 'Описание файла'
+        verbose_name_plural = 'Описание файла'
+        ordering = ['-title', '-file']
+        indexes = [
+            models.Index(fields=['title']),
+            models.Index(fields=['description']),
+        ]
+
+    def __str__(self):
+        return f"{self.file.filename}-{self.title}"
