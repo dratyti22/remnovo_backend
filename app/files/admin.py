@@ -1,6 +1,8 @@
 from django.contrib import admin
 
-from .models import Material, File, DescriptionFile, ImageFile
+from .models import Material, File, DescriptionFile, ImageFile, Tags
+
+from mptt.admin import DraggableMPTTAdmin
 
 
 @admin.register(Material)
@@ -32,3 +34,15 @@ class ImageFileAdmin(admin.ModelAdmin):
 
     def description_file(self, obj):
         return obj.description_file.title
+
+
+@admin.register(Tags)
+class TagsAdmin(DraggableMPTTAdmin):
+    list_display = ("tree_actions", "indented_title", 'id', 'name', 'display_user', 'section')
+    list_display_links = ('name',)
+    list_filter = ('user', 'section')
+    search_fields = ('name',)
+
+    def display_user(self, obj):
+        if obj.user.username:
+            return obj.user.username

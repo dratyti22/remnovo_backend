@@ -1,6 +1,34 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from mptt.models import MPTTModel, TreeForeignKey
+
+
+class Tags(MPTTModel):
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='Создатель')
+    section = models.BooleanField(default=False, verbose_name='Раздел')
+    name = models.CharField(max_length=150, unique=True, verbose_name='Название категории')
+    parent = TreeForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        db_index=True,
+        related_name='children',
+        verbose_name='Родительская категория'
+    )
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
+
+    class Meta:
+        db_table = 'tag'
+        verbose_name = 'Tag'
+        verbose_name_plural = 'Tags'
+
+    def __str__(self):
+        return f"{self.user.username}-{self.name}"
+
 
 class Material(models.Model):
     name = models.CharField(max_length=500, unique=True, verbose_name="Название")
@@ -50,6 +78,7 @@ class DescriptionFile(models.Model):
     title = models.CharField(max_length=300, verbose_name='Заголовок')
     description = models.TextField(verbose_name='Описание')
     line_video = models.URLField(verbose_name='Ссылка на видео')
+    tags = models.ManyToManyField(Tags, blank=True, verbose_name='Теги')
 
     class Meta:
         db_table = 'description_file'
