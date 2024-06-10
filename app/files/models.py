@@ -27,7 +27,7 @@ class Tags(MPTTModel):
         verbose_name_plural = 'Tags'
 
     def __str__(self):
-        return f"{self.user.username}-{self.name}"
+        return f"{self.name}"
 
 
 class Material(models.Model):
