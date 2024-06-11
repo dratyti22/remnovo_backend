@@ -9,10 +9,11 @@ class TagsIsStaffOrRead(BasePermission):
     Смотреть - Все, если тег является разделом.
     '''
 
+    DANGEROUS_METHODS = ("PUT", "PATCH", "DELETE")
+
     def has_object_permission(self, request, view, obj):
-        if request.method in SAFE_METHODS:
-            return obj.section
-        elif request.method == 'POST':
-            return request.user.is_staff or obj.user == request.user
-        else:
-            return request.user.is_staff
+        return bool(
+            request.method in self.DANGEROUS_METHODS and request.user.is_authenticated and request.user.is_staff or
+            request.method == "POST" and request.user.is_authenticated and (
+                    request.user.is_staff or obj.user == request.user)
+        )

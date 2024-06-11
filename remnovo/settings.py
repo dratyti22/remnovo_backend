@@ -141,15 +141,28 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-LOGGING = {
-    'version': 1,
-    'handlers': {
-        'console': {'class': "logging.StreamHandler"}
-    },
-    'loggers': {
-        'django.db.backends': {
-            'handlers': ['console'],
-            'level': "DEBUG"
-        }
-    }
+# LOGGING = {
+#     'version': 1,
+#     'handlers': {
+#         'console': {'class': "logging.StreamHandler"}
+#     },
+#     'loggers': {
+#         'django.db.backends': {
+#             'handlers': ['console'],
+#             'level': "DEBUG"
+#         }
+#     }
+# }
+
+DEBUG_TOOLBAR_CONFIG = {
+    'IS_RUNNING_TESTS': False
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    )
 }

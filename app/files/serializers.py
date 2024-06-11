@@ -4,8 +4,8 @@ from app.files.models import Tags
 
 
 class TagsSerializer(serializers.ModelSerializer):
-    user_id = serializers.IntegerField(read_only=True)
+    # user_id = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Tags
-        fields = ('id', 'user_id', 'section', 'name', 'parent')
+        fields = ('id', 'user', 'section', 'name', 'parent')
