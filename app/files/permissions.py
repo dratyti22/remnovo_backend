@@ -1,4 +1,5 @@
-from rest_framework.permissions import BasePermission, SAFE_METHODS
+from rest_framework.permissions import BasePermission
+from .models import Tags
 
 
 class TagsIsStaffOrRead(BasePermission):
@@ -9,11 +10,18 @@ class TagsIsStaffOrRead(BasePermission):
     Смотреть - Все, если тег является разделом.
     '''
 
-    DANGEROUS_METHODS = ("PUT", "PATCH", "DELETE")
-
-    def has_object_permission(self, request, view, obj):
-        return bool(
-            request.method in self.DANGEROUS_METHODS and request.user.is_authenticated and request.user.is_staff or
-            request.method == "POST" and request.user.is_authenticated and (
-                    request.user.is_staff or obj.user == request.user)
-        )
+    def has_permission(self, request, view):
+        if request.method == 'POST':  # Создавать
+            user_get = request.data.get('user')
+            if user_get:
+                tag = Tags.objects.filter(user=user_get)
+                if tag == request.user:
+                    return True
+            return request.user.is_staff
+        elif request.method == 'PUT' or request.method == 'PATCH':  # Обновлять
+            return request.user.is_staff
+        elif request.method == 'DELETE':  # Удалять
+            return request.user.is_staff
+        elif request.method == 'GET':  # Смотреть
+            return True
+        return False

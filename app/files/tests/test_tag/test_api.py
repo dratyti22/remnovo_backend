@@ -49,7 +49,8 @@ class ApiTagsSerializerTestCase(APITestCase):
     #     self.assertEqual(serializer_data, response.data)
 
     def test_post(self):
-        user3 = User.objects.create(username='test_user3', first_name='test_first3', last_name='test_last3')
+        user3 = User.objects.create(username='test_user3', first_name='test_first3', last_name='test_last3',
+                                    is_staff=True)
         self.assertEqual(2, Tags.objects.all().count())
 
         url = reverse("tags-list")
@@ -62,26 +63,27 @@ class ApiTagsSerializerTestCase(APITestCase):
         }
 
         json_data = json.dumps(data)
-        # self.client.force_login(user3)
+        self.client.force_login(user3)
         response = self.client.post(url, data=json_data, content_type='application/json')
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(3, Tags.objects.all().count())
 
     def test_put(self):
-        url = reverse("Tags-detail", args=(self.company1.id,))
+        url = reverse("tags-detail", args=(self.tag1.id,))
         data = {
-            'id': self.t.id,
-            "name": 'name',
-            "address": 'addr',
-            "email": 'test@gmail.com3',
-            "phone": 'test_phone3',
+            'id': self.tag1.id,
+            "user": self.user2.id,
+            "section": True,
+            "name": "faf",
+            "parent": None,
         }
         json_data = json.dumps(data)
-        self.client.force_login(self.user)
+        self.client.force_login(self.user2)
         response = self.client.put(url, data=json_data, content_type='application/json')
+        print(json_data)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.company1.refresh_from_db()
-        self.assertEqual('name', self.company1.name)
+        self.tag1.refresh_from_db()
+        self.assertEqual('faf', self.tag1.name)
 
     def test_delete(self):
         self.assertEqual(2, Tags.objects.all().count())
