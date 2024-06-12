@@ -11,8 +11,8 @@ from app.files.serializers import TagsSerializer
 
 class ApiTagsSerializerTestCase(APITestCase):
     def setUp(self):
-        self.user = User.objects.create(username='test_user1')
-        self.user2 = User.objects.create(username='test_user2')
+        self.user = User.objects.create(username='test_user1', is_staff=True)
+        self.user2 = User.objects.create(username='test_user2', is_staff=True)
 
         self.tag1 = Tags.objects.create(user=self.user2, name='tag2', section=True)
         self.tag2 = Tags.objects.create(user=self.user, name='tag3', section=True, parent=self.tag1)
@@ -49,8 +49,7 @@ class ApiTagsSerializerTestCase(APITestCase):
     #     self.assertEqual(serializer_data, response.data)
 
     def test_post(self):
-        user3 = User.objects.create(username='test_user3', first_name='test_first3', last_name='test_last3',
-                                    is_staff=True)
+        user3 = User.objects.create(username='test_user3', first_name='test_first3', last_name='test_last3')
         self.assertEqual(2, Tags.objects.all().count())
 
         url = reverse("tags-list")
@@ -88,7 +87,7 @@ class ApiTagsSerializerTestCase(APITestCase):
     def test_delete(self):
         self.assertEqual(2, Tags.objects.all().count())
 
-        url = reverse("Tags-detail", args=(self.company1.id,))
+        url = reverse("tags-detail", args=(self.tag2.id,))
         self.client.force_login(self.user)
         response = self.client.delete(url)
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
