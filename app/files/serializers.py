@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from app.files.models import Tags, File
+from app.files.models import Tags, File, Material
 
 
 class TagsSerializer(serializers.ModelSerializer):
@@ -18,3 +18,9 @@ class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
         fields = ('filename', 'height', 'width', 'length', 'status', 'owners', 'materials')
+
+
+class MaterialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Material
+        fields = '__all__'

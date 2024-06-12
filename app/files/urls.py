@@ -7,5 +7,6 @@ router = SimpleRouter()
 
 router.register("api/tag", views.TagsView)
 router.register('api/file', views.FileView)
+router.register('api/material', views.MaterialView)
 
 urlpatterns = router.urls

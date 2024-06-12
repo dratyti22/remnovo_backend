@@ -13,12 +13,7 @@ class TagsIsStaffOrRead(BasePermission):
 
     def has_permission(self, request, view):
         if request.method == 'POST':  # Создавать
-            user_id = request.data.get('user')
-            if user_id:
-                user_obj = User.objects.get(id=user_id)
-                if request.user == user_obj or request.user.is_staff:
-                    return True
-            return False
+            return request.user.is_staff
         elif request.method == 'PUT' or request.method == 'PATCH':  # Обновлять
             return request.user.is_staff
         elif request.method == 'DELETE':  # Удалять
@@ -52,3 +47,10 @@ class FilePermission(BasePermission):
             if request.user in file_obj.owners.all() or request.user.is_staff:
                 return True
             return False
+
+
+class IsAuthorizedOrWorker(BasePermission):
+    def has_permission(self, request, view):
+        if request.method in SAFE_METHODS:
+            return True
+        return request.user.is_authenticated and (request.user.is_staff or request.user.is_worker)
