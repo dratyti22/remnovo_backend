@@ -30,18 +30,19 @@ class MaterialSerializer(serializers.ModelSerializer):
 class ImageFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImageFile
-        fields = ['id', 'image', 'description_file']
+        fields = ["image"]
 
 
 class DescriptionFileSerializer(serializers.ModelSerializer):
-    image_file = serializers.SerializerMethodField('get_image_file')
+    image_file = ImageFileSerializer(many=True)
+    tags_name = serializers.ListField(child=serializers.CharField(), write_only=True)
+    tags_name_display = serializers.SerializerMethodField()
+    file_filename = serializers.CharField(read_only=False)
 
     class Meta:
         model = DescriptionFile
-        fields = ['file', 'user', 'title', 'description', 'line_video', 'tags', 'image_file']
+        fields = ['file_filename', 'user', 'title', 'description', 'line_video', 'tags_name', 'tags_name_display',
+                  'image_file']
 
-    def get_image_file(self, obj):
-        if obj.image_file.exists():
-            return [img.image.url for img in obj.image_file.all()]
-        else:
-            return []
+    def get_tags_name_display(self, obj):
+        return [tag.name for tag in obj.tags.all()]

@@ -98,7 +98,7 @@ class ImageFile(models.Model):
     description_file = models.ForeignKey(to=DescriptionFile, on_delete=models.CASCADE, related_name='image_file',
                                          verbose_name='File')
 
-    image = models.ImageField(upload_to='file_image', verbose_name='Изображение')
+    image = models.ImageField(upload_to='file_image', verbose_name='Изображение', null=True, blank=True)
 
     class Meta:
         db_table = 'image_file'
