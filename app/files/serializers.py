@@ -33,16 +33,18 @@ class ImageFileSerializer(serializers.ModelSerializer):
         fields = ["image"]
 
 
+class TagsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tags
+        fields = ['name']
+
+
 class DescriptionFileSerializer(serializers.ModelSerializer):
     image_file = ImageFileSerializer(many=True)
-    tags_name = serializers.ListField(child=serializers.CharField(), write_only=True)
-    tags_name_display = serializers.SerializerMethodField()
     file_filename = serializers.CharField(read_only=False)
+    tags = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Tags.objects.all())
 
     class Meta:
         model = DescriptionFile
-        fields = ['file_filename', 'user', 'title', 'description', 'line_video', 'tags_name', 'tags_name_display',
+        fields = ['file_filename', 'user', 'title', 'description', 'line_video', 'tags',
                   'image_file']
-
-    def get_tags_name_display(self, obj):
-        return [tag.name for tag in obj.tags.all()]
