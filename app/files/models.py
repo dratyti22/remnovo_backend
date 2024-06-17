@@ -5,6 +5,8 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 
 class Tags(MPTTModel):
+    time_create = models.DateTimeField(
+        auto_now_add=True, verbose_name='Время добавления')
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='Создатель')
     section = models.BooleanField(default=False, verbose_name='Раздел')
     name = models.CharField(max_length=150, unique=True, verbose_name='Название категории')
@@ -44,6 +46,8 @@ class Material(models.Model):
 
 
 class File(models.Model):
+    time_create = models.DateTimeField(
+        auto_now_add=True, verbose_name='Время добавления')
     filename = models.CharField(max_length=500, unique=True, verbose_name="Имя файла")
     owners = models.ManyToManyField(to=User, verbose_name='Владельцы')
     height = models.FloatField(verbose_name='Высота')
@@ -73,6 +77,8 @@ class File(models.Model):
 
 
 class DescriptionFile(models.Model):
+    time_create = models.DateTimeField(
+        auto_now_add=True, verbose_name='Время добавления')
     file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='description_file', verbose_name='File')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
     title = models.CharField(max_length=300, verbose_name='Заголовок')
