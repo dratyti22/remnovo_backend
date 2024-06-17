@@ -4,21 +4,19 @@ from app.files.models import Tags, File, Material, ImageFile, DescriptionFile
 
 
 class TagsSerializer(serializers.ModelSerializer):
-    # user_id = serializers.IntegerField(read_only=True)
-
     class Meta:
         model = Tags
-        fields = ('id', 'user', 'section', 'name', 'parent')
+        fields = ('id', 'user', 'section', 'name', 'parent', "time_create")
+        read_only_fields = ('time_create',)
 
 
 class FileSerializer(serializers.ModelSerializer):
-    # owner_id = serializers.IntegerField(read_only=True)
-    # materials_id = serializers.IntegerField(read_only=True)
-    materials = serializers.StringRelatedField(many=True)
+    materials = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Material.objects.all())
 
     class Meta:
         model = File
-        fields = ('filename', 'height', 'width', 'length', 'status', 'owners', 'materials')
+        fields = ('filename', 'height', 'width', 'length', 'status', 'owners', 'materials', 'time_create')
+        read_only_fields = ('time_create',)
 
 
 class MaterialSerializer(serializers.ModelSerializer):
@@ -33,12 +31,6 @@ class ImageFileSerializer(serializers.ModelSerializer):
         fields = ["image"]
 
 
-class TagsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tags
-        fields = ['name']
-
-
 class DescriptionFileSerializer(serializers.ModelSerializer):
     image_file = ImageFileSerializer(many=True)
     file_filename = serializers.CharField(read_only=False)
@@ -47,4 +39,5 @@ class DescriptionFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = DescriptionFile
         fields = ['file_filename', 'user', 'title', 'description', 'line_video', 'tags',
-                  'image_file']
+                  'image_file', "time_create"]
+        read_only_fields = ('time_create',)

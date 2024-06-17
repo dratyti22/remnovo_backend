@@ -72,8 +72,8 @@ class ApiFileSerializerTestCase(APITestCase):
                 self.user2.id
             ],
             "materials": [
-                self.material1.id,
-                self.material3.id
+                self.material1.name,
+                self.material3.name
             ]
         }
 
@@ -96,8 +96,8 @@ class ApiFileSerializerTestCase(APITestCase):
                 self.user2.id
             ],
             "materials": [
-                self.material1.id,
-                self.material3.id
+                self.material1.name,
+                self.material3.name
             ]
         }
         json_data = json.dumps(data)

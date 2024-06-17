@@ -13,11 +13,12 @@ class ProductSerializersTestCase(APITestCase):
         self.user = User.objects.create(username='test_user1')
         self.user2 = User.objects.create(username='test_user2')
 
-        self.file1 = File.objects.create(filename='n', height=45, width=34, length=23, status=1)
+        self.file1 = File.objects.create(filename='n', height=45, width=34, length=23, status=1, time_create=1718614129)
         self.file1.owners.set([self.user2])
         self.file1.materials.set([self.material1, self.material3])
 
-        self.file2 = File.objects.create(filename='n2', height=42, width=35, length=25, status=3)
+        self.file2 = File.objects.create(filename='n2', height=42, width=35, length=25, status=3,
+                                         time_create=1718614129)
         self.file2.owners.set([self.user2, self.user])
         self.file2.materials.set([self.material1])
 
@@ -36,9 +37,9 @@ class ProductSerializersTestCase(APITestCase):
                     self.user2.id
                 ],
                 "materials": [
-                    self.material1.id,
-                    self.material3.id
-                ]
+                    'm1', 'm3'
+                ],
+                'time_create': 1718614129
             },
             {
                 "filename": "n2",
@@ -51,8 +52,9 @@ class ProductSerializersTestCase(APITestCase):
                     self.user2.id,
                 ],
                 "materials": [
-                    self.material1.id,
-                ]
+                    'm1'
+                ],
+                'time_create': 1718614129
             },
         ]
 
