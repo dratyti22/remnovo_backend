@@ -32,12 +32,30 @@ class ImageFileSerializer(serializers.ModelSerializer):
 
 
 class DescriptionFileSerializer(serializers.ModelSerializer):
-    image_file = ImageFileSerializer(many=True)
-    file_filename = serializers.CharField(read_only=False)
+    image_file = ImageFileSerializer(many=True, read_only=True)
     tags = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Tags.objects.all())
+    file_filename = serializers.CharField()
+    # user_id = serializers.ReadOnlyField(source="user.id")
+    uploaded_images = serializers.ListField(
+        child=serializers.ImageField(allow_empty_file=False, use_url=False),
+        write_only=True
+    )
 
     class Meta:
         model = DescriptionFile
-        fields = ['file_filename', 'user', 'title', 'description', 'line_video', 'tags',
-                  'image_file', "time_create"]
+        fields = ["pk", 'file_filename', 'user', 'title', 'description', 'line_video', 'tags',
+                  'image_file', "time_create", "uploaded_images"]
         read_only_fields = ('time_create',)
+
+
+    def create(self, validated_data):
+        images_data = validated_data.pop("uploaded_images", None)
+        tags = validated_data.pop("tags", None)
+        file_name = validated_data.pop("file_filename", None)
+        file = File.objects.get(filename=file_name)
+        des = DescriptionFile(file=file, **validated_data)
+        des.save()
+        des.tags.set(tags)
+        for image in images_data:
+            ImageFile.objects.create(description_file=des, image=image)
+        return des

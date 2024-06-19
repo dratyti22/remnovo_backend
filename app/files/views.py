@@ -1,11 +1,15 @@
 from django.db.models import F
+from django.middleware.csrf import get_token
+from rest_framework import status
 from rest_framework.filters import SearchFilter
+from rest_framework.parsers import MultiPartParser, JSONParser, FormParser
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from .serializers import TagsSerializer, FileSerializer, MaterialSerializer, ImageFileSerializer, \
     DescriptionFileSerializer
 from .models import Tags, File, Material, ImageFile, DescriptionFile
-from .permissions import TagsIsStaffOrRead, FilePermission, IsAuthorizedOrWorker
+from .permissions import TagsIsStaffOrRead, FilePermission, IsAuthorizedOrWorker, IsAuthorOrStaff
 
 
 class TagsView(ModelViewSet):
@@ -30,15 +34,15 @@ class MaterialView(ModelViewSet):
     permission_classes = [IsAuthorizedOrWorker]
 
 
-class ImageFileView(ModelViewSet):
-    queryset = ImageFile.objects.all().select_related("description_file", 'description_file__file')
-    serializer_class = ImageFileSerializer
-
-
 class DescriptionFileView(ModelViewSet):
     queryset = DescriptionFile.objects.all().annotate(
         file_filename=F("file__filename")
-    ).select_related("user").prefetch_related("tags", "image_file")
+    ).select_related("user", 'file').prefetch_related("tags", "image_file")
     serializer_class = DescriptionFileSerializer
+    # permission_classes = [IsAuthorOrStaff]
     filter_backends = [SearchFilter]
     search_fields = ["time_create", "user__id", "tags__name"]
+    parser_classes = (MultiPartParser, FormParser)
+
+    # def perform_create(self, serializer):
+    #     serializer.save(user=self.request.user)
