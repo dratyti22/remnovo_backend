@@ -18,3 +18,7 @@ db.sqlite3
 #coverage
 .coverage
 htmlcov/
+
+#Writerside
+Writerside/cfg
+Writerside/images
