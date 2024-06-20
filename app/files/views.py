@@ -37,7 +37,7 @@ class MaterialView(ModelViewSet):
 class DescriptionFileView(ModelViewSet):
     queryset = DescriptionFile.objects.all().select_related("user", 'file').prefetch_related("tags", "image_file")
     serializer_class = DescriptionFileSerializer
-    # permission_classes = [IsAuthorOrStaff]
+    permission_classes = [IsAuthorOrStaff]
     filter_backends = [SearchFilter]
     search_fields = ["time_create", "user__id", "tags__name"]
     parser_classes = (MultiPartParser, FormParser, JSONParser)
