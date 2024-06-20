@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "mptt",
     'debug_toolbar',
+    "corsheaders",
 
     'app.files.apps.FilesConfig',
 ]
@@ -52,6 +53,9 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+
+    "corsheaders.middleware.CorsMiddleware",
+
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -155,7 +159,7 @@ INTERNAL_IPS = [
 # }
 
 DEBUG_TOOLBAR_CONFIG = {
-    'IS_RUNNING_TESTS': False
+    'IS_RUNNING_TESTS': int(getenv("IS_RUNNING_TESTS", default=0))
 }
 
 # REST_FRAMEWORK = {
@@ -166,3 +170,12 @@ DEBUG_TOOLBAR_CONFIG = {
 #         'rest_framework.parsers.JSONParser',
 #     )
 # }
+
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_HTTPONLY = True
+CORS_ALLOWED_ORIGINS = [origin.strip() for origin in getenv("CORS_ALLOWED_ORIGINS").split(",")]
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in getenv("CSRF_TRUSTED_ORIGINS").split(",")]
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+CORS_ALLOW_CREDENTIALS = True
