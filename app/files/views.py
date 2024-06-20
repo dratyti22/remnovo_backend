@@ -35,14 +35,12 @@ class MaterialView(ModelViewSet):
 
 
 class DescriptionFileView(ModelViewSet):
-    queryset = DescriptionFile.objects.all().annotate(
-        file_filename=F("file__filename")
-    ).select_related("user", 'file').prefetch_related("tags", "image_file")
+    queryset = DescriptionFile.objects.all().select_related("user", 'file').prefetch_related("tags", "image_file")
     serializer_class = DescriptionFileSerializer
     # permission_classes = [IsAuthorOrStaff]
     filter_backends = [SearchFilter]
     search_fields = ["time_create", "user__id", "tags__name"]
-    parser_classes = (MultiPartParser, FormParser)
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
 
-    # def perform_create(self, serializer):
-    #     serializer.save(user=self.request.user)
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
