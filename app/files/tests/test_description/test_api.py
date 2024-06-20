@@ -135,3 +135,41 @@ class ApiFileSerializerTestCase(APITestCase):
         response = self.client.delete(url)
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
         self.assertEqual(1, DescriptionFile.objects.all().count())
+
+    def test_get_one(self):
+        url = reverse("descriptionfile-detail", args=(self.des1.id,))
+        response = self.client.get(url)
+        file = DescriptionFile.objects.get(id=self.des1.id)
+        serializer = DescriptionFileSerializer(file, context={'request': response.wsgi_request})
+        serializer_data = serializer.data
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(serializer_data, response.data)
+
+    def test_get_search(self):
+        url = reverse("descriptionfile-list")
+        response = self.client.get(url, data={'search': 'nnn'})
+        file = DescriptionFile.objects.filter(tags__name='nnn')
+        serializer = DescriptionFileSerializer(file, many=True, context={'request': response.wsgi_request})
+        serializer_data = serializer.data
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(serializer_data, response.data)
+
+    def test_put_unauthorized(self):
+        url = reverse("descriptionfile-detail", args=(self.des2.id,))
+        data = {
+            'id': self.des2.id,
+            "title": "fff",
+            "file": self.file2.filename,
+            "description": "фффффффф",
+            "line_video": "https://yootube.com/afal",
+            "time_create": 1718613657,
+            "tags": [self.tag1.name, self.tag2.name]
+        }
+        json_data = json.dumps(data)
+        response = self.client.put(url, data=json_data, content_type="application/json")
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+
+    def test_delete_unauthorized(self):
+        url = reverse("descriptionfile-detail", args=(self.des2.id,))
+        response = self.client.delete(url)
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)

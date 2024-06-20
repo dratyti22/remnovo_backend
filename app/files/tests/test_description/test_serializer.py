@@ -59,7 +59,7 @@ class ProductSerializersTestCase(APITestCase):
         expect_data = [
             {
                 "pk": self.des1.pk,
-                "file_filename": "n",
+                "file": "n",
                 "user_id": self.user1.id,
                 "title": "nnn",
                 "description": "nnn",
@@ -76,7 +76,7 @@ class ProductSerializersTestCase(APITestCase):
             },
             {
                 "pk": self.des2.pk,
-                "file_filename": "n2",
+                "file": "n2",
                 "user_id": self.user2.id,
                 "title": "ффф",
                 "description": "фффффффф",
