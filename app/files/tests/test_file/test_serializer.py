@@ -33,11 +33,11 @@ class ProductSerializersTestCase(APITestCase):
                 "width": 34.0,
                 "length": 23.0,
                 "status": 1,
-                "owners": [
+                "owners_id": [
                     self.user2.id
                 ],
                 "materials": [
-                    'm1', 'm3'
+                    self.material1.id, self.material3.id
                 ],
                 'time_create': 1718614129
             },
@@ -47,12 +47,12 @@ class ProductSerializersTestCase(APITestCase):
                 "width": 35.0,
                 "length": 25.0,
                 "status": 3,
-                "owners": [
+                "owners_id": [
                     self.user.id,
                     self.user2.id,
                 ],
                 "materials": [
-                    'm1'
+                    self.material1.id
                 ],
                 'time_create': 1718614129
             },

@@ -7,16 +7,19 @@ class TagsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tags
         fields = ('id', 'user', 'section', 'name', 'parent', "time_create")
-        read_only_fields = ('time_create',)
+        read_only_fields = ('time_create', "user")
 
 
 class FileSerializer(serializers.ModelSerializer):
-    materials = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Material.objects.all())
+    owners_id = serializers.SerializerMethodField("get_owners_id")
 
     class Meta:
         model = File
-        fields = ('filename', 'height', 'width', 'length', 'status', 'owners', 'materials', 'time_create')
-        read_only_fields = ('time_create',)
+        fields = ('filename', 'height', 'width', 'length', 'status', 'owners_id', 'materials', 'time_create')
+        read_only_fields = ('time_create', "owners_id")
+
+    def get_owners_id(self, obj):
+        return [owner.id for owner in obj.owners.all()]
 
 
 class MaterialSerializer(serializers.ModelSerializer):

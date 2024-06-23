@@ -68,12 +68,9 @@ class ApiFileSerializerTestCase(APITestCase):
             "width": 34.0,
             "length": 23.0,
             "status": 1,
-            "owners": [
-                self.user2.id
-            ],
             "materials": [
-                self.material1.name,
-                self.material3.name
+                self.material1.id,
+                self.material3.id
             ]
         }
 
@@ -92,12 +89,9 @@ class ApiFileSerializerTestCase(APITestCase):
             "width": 34.0,
             "length": 23.0,
             "status": 1,
-            "owners": [
-                self.user2.id
-            ],
             "materials": [
-                self.material1.name,
-                self.material3.name
+                self.material1.id,
+                self.material3.id
             ]
         }
         json_data = json.dumps(data)

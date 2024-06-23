@@ -19,6 +19,9 @@ class TagsView(ModelViewSet):
     filter_backends = [SearchFilter]
     search_fields = ['name', "user__id"]
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 
 class FileView(ModelViewSet):
     queryset = File.objects.all().prefetch_related("owners", 'materials')
@@ -26,6 +29,9 @@ class FileView(ModelViewSet):
     permission_classes = [FilePermission]
     filter_backends = [SearchFilter]
     search_fields = ['status', "time_create", "owners__id"]
+
+    def perform_create(self, serializer):
+        serializer.save(owners=[self.request.user])
 
 
 class MaterialView(ModelViewSet):
