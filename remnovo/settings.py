@@ -9,12 +9,12 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 from os import getenv
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(dotenv_path="docker/env/.env.dev")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -94,7 +94,7 @@ DATABASES = {
         'NAME': getenv("DB_NAME"),
         'USER': getenv("DB_USER"),
         'PASSWORD': getenv("DB_PASSWORD"),
-        'HOST': getenv("DB_HOST"),
+        'HOST': getenv("DB_CONNECT"), # место db_host на db_connect
         'PORT': getenv("DB_PORT"),
     }
 }

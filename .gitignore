@@ -9,6 +9,9 @@ __pycache__/
 #Media
 media/
 
+#Static
+static/
+
 #Secret environment variables
 .env
 
@@ -22,3 +25,7 @@ htmlcov/
 #Writerside
 Writerside/cfg
 Writerside/images
+
+#configuration
+docker/
+docker/env/
