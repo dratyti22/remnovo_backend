@@ -65,7 +65,7 @@ class ProductSerializersTestCase(APITestCase):
                 "description": "nnn",
                 "line_video": "https://yootube.com/nnn",
                 "tags": [
-                    self.tag1.name
+                    self.tag1.id
                 ],
                 "image_file": [
                     {
@@ -82,8 +82,8 @@ class ProductSerializersTestCase(APITestCase):
                 "description": "фффффффф",
                 "line_video": "https://yootube.com/afal",
                 "tags": [
-                    self.tag1.name,
-                    self.tag2.name
+                    self.tag1.id,
+                    self.tag2.id
                 ],
                 "image_file": [
                 ],

@@ -36,7 +36,6 @@ class ImageFileSerializer(serializers.ModelSerializer):
 
 class DescriptionFileSerializer(serializers.ModelSerializer):
     image_file = ImageFileSerializer(many=True, read_only=True)
-    tags = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Tags.objects.all())
     file = serializers.CharField()
     user_id = serializers.ReadOnlyField(source="user.id")
     uploaded_images = serializers.ListField(

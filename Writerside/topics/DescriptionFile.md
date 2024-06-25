@@ -21,7 +21,7 @@
         "description": "uu",
         "line_video": "https://yootube.com/uuu",
         "tags": [
-            "a"
+            1
         ],
         "image_file": [
             {
@@ -48,7 +48,7 @@ file: Уникальное имя для файла \
 title: Название. \
 description: Описание. \
 line_video: Ссылка на видео. \
-tags: Список к каким тегам привязан
+tags: Список к каким тегам привязан, id tags
 uploaded_images: Фото
 User: Создается автоматически
 

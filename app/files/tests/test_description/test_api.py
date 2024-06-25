@@ -99,8 +99,8 @@ class ApiFileSerializerTestCase(APITestCase):
             "description": "aaa",
             "line_video": "https://yootube.com/aaa",
             "tags": [
-                self.tag1.name,
-                self.tag2.name
+                self.tag1.id,
+                self.tag2.id
             ],
             "uploaded_images": []
         }
@@ -118,7 +118,7 @@ class ApiFileSerializerTestCase(APITestCase):
             "description": "фффффффф",
             "line_video": "https://yootube.com/afal",
             "time_create": 1718613657,
-            "tags": [self.tag1.name, self.tag2.name]
+            "tags": [self.tag1.id, self.tag2.id]
         }
         json_data = json.dumps(data)
         self.client.force_login(self.user2)
