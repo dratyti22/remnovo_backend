@@ -11,10 +11,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
-from os import getenv
-from dotenv import load_dotenv
+import environ
 
-load_dotenv(dotenv_path="docker/env/.env.dev")
+env = environ.Env()
+
+environ.Env.read_env(env_file=Path('./docker/env/.env.dev'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,15 +24,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = getenv("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 #
 # ALLOWED_HOSTS = []
-DEBUG = int(getenv('DEBUG', default=1))
+DEBUG = int(env('DEBUG', default=1))
 
-ALLOWED_HOSTS = getenv('ALLOWED_HOSTS').split()
+ALLOWED_HOSTS = env('ALLOWED_HOSTS').split()
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    "django.contrib.postgres",
 
     'rest_framework',
     "mptt",
@@ -90,12 +93,12 @@ WSGI_APPLICATION = 'remnovo.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': getenv("DB_ENGINE"),
-        'NAME': getenv("DB_NAME"),
-        'USER': getenv("DB_USER"),
-        'PASSWORD': getenv("DB_PASSWORD"),
-        'HOST': getenv("DB_CONNECT"), # место db_host на db_connect
-        'PORT': getenv("DB_PORT"),
+        'ENGINE': env("DB_ENGINE"),
+        'NAME': env("DB_NAME"),
+        'USER': env("DB_USER"),
+        'PASSWORD': env("DB_PASSWORD"),
+        'HOST': env("DB_HOST"),
+        'PORT': env("DB_PORT"),
     }
 }
 
@@ -159,7 +162,7 @@ INTERNAL_IPS = [
 # }
 
 DEBUG_TOOLBAR_CONFIG = {
-    'IS_RUNNING_TESTS': int(getenv("IS_RUNNING_TESTS", default=0))
+    'IS_RUNNING_TESTS': int(env("IS_RUNNING_TESTS", default=0))
 }
 
 # REST_FRAMEWORK = {
@@ -175,7 +178,7 @@ CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_HTTPONLY = True
-CORS_ALLOWED_ORIGINS = [origin.strip() for origin in getenv("CORS_ALLOWED_ORIGINS").split(",")]
-CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in getenv("CSRF_TRUSTED_ORIGINS").split(",")]
+CORS_ALLOWED_ORIGINS = [origin.strip() for origin in env("CORS_ALLOWED_ORIGINS").split(",")]
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in env("CSRF_TRUSTED_ORIGINS").split(",")]
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 CORS_ALLOW_CREDENTIALS = True

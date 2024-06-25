@@ -1,30 +1,26 @@
-FROM ubuntu:22.04
+FROM python:3.11.9-alpine
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
-ARG DEBIAN_FRONTEND=noninteractive
 
-# Установка зависимостей
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3.11 \
-    python3-pip \
-     && \
-    apt-get clean
+# Устанавливаем обновления и необходимые модули
+RUN apk update && apk add libpq
+RUN apk add --virtual .build-deps gcc python3-dev musl-dev postgresql-dev
 
-# Обновление pip
-RUN pip install --upgrade pip --no-cache-dir
+# Обновление pip python
+RUN pip install --upgrade pip
+
+# Установка пакетов для проекта
+COPY requirements.txt ./requirements.txt
+RUN pip install -r requirements.txt
+
+WORKDIR /app
+
+# Удаляем зависимости билда
+RUN apk del .build-deps
 
 # Копирование проекта
-COPY . /app/
+COPY . .
 
-# Установка зависимостей для проекта
-COPY requirements.txt /app/requirements.txt
-WORKDIR /app
-RUN pip install -r requirements.txt --no-cache-dir
-
-
-# Установка прав доступа
-RUN chmod -R 755 /app/
-
-# Очистка
-RUN rm -rf /var/lib/apt/lists/*
+# Настройка записи и доступа
+RUN chmod -R 777 ./

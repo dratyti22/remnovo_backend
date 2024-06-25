@@ -1,38 +1,38 @@
-version: "3.8"
+version: '3.8'
 
 volumes:
   pgdata:
   static:
   media:
 
-
 services:
+  db:
+    image: postgres:alpine
+    container_name: db
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=qwerty
+      - POSTGRES_DB=remnovo
+
   django:
     build:
       context: .
     ports:
       - '8000:8000'
     container_name: django
-    restart: always
+    env_file:
+      - ./docker/env/.env.dev
     volumes:
       - ./:/app
       - static:/app/static
       - media:/app/media
-    env_file:
-      - docker/env/.env.dev
-    environment:
-      - DB_HOST = db
-      - DB_NAME=DB_NAME
-      - DB_USER=DB_USER
-      - DB_PASSWORD=DB_PASSWORD
-      - DB_PORT=DB_PORT
     depends_on:
-      - postgres
-      - redis
+      - db
+    command: sh -c  "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
 
-    command: sh -c "python3 manage.py makemigrations &&
-      python3 manage.py migrate &&
-      python3 manage.py runserver 0.0.0.0:8000"
   nginx:
     container_name: nginx
     working_dir: /app
@@ -49,27 +49,4 @@ services:
     depends_on:
       - django
 
-  postgres:
-    image: postgres:16.3-alpine
-    container_name: db
-    restart: always
-    env_file:
-      - docker/env/.env.dev
-    volumes:
-      - pgdata:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_DB=DB_NAME
-      - POSTGRES_USER = DB_USER
-      - POSTGRES_PASSWORD = DB_PASSWORD
-
-
-  redis:
-    image: redis:alpine
-    container_name: redis
-    env_file:
-      - docker/env/.env.dev
-    expose:
-      - 6379
-    volumes:
-      - ./docker/redis/data:/data
 

@@ -29,3 +29,6 @@ Writerside/images
 #configuration
 docker/
 docker/env/
+
+.github/
+qodana.yaml
