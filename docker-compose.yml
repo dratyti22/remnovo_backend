@@ -1,49 +1,65 @@
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Docker Compose reference guide at
-# https://docs.docker.com/go/compose-spec-reference/
+version: '3.8'
 
-# Here the instructions define your application as a service called "server".
-# This service is built from the Dockerfile in the current directory.
-# You can add other services your application may depend on here, such as a
-# database or a cache. For examples, see the Awesome Compose repository:
-# https://github.com/docker/awesome-compose
+volumes:
+  pgdata:
+  static:
+  media:
+
 services:
-  server:
+  db:
+    image: postgres:alpine
+    container_name: db
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    env_file:
+      - ./docker/env/.env.prod.db
+
+  django:
     build:
       context: .
     ports:
-      - 8000:8000
-
-# The commented out section below is an example of how to define a PostgreSQL
-# database that your application can use. `depends_on` tells Docker Compose to
-# start the database before your application. The `db-data` volume persists the
-# database data between container restarts. The `db-password` secret is used
-# to set the database password. You must create `db/password.txt` and add
-# a password of your choosing to it before running `docker compose up`.
+      - '8000:8000'
+    container_name: django
+    env_file:
+      - ./docker/env/.env.prod
+    volumes:
+      - ./:/app
+      - static:/app/static
+      - media:/app/media
     depends_on:
-       db:
-         condition: service_healthy
-  db:
-     image: postgres
-     restart: always
-     user: postgres
-     secrets:
-       - db-password
-     volumes:
-       - db-data:/var/lib/postgresql/data
-     environment:
-       - POSTGRES_DB=example
-       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
-     expose:
-       - 5432
-     healthcheck:
-       test: [ "CMD", "pg_isready" ]
-       interval: 10s
-       timeout: 5s
-       retries: 5
- volumes:
-   db-data:
- secrets:
-   db-password:
-     file: db/password.txt
+      - db
+    command: sh -c  "python manage.py collectstatic --no-input &&
+                    python manage.py makemigrations &&
+                    python manage.py migrate &&
+                    gunicorn --workers=4 --reload --max-requests=1000 backend.wsgi -b 0.0.0.0:8000""
+
+  nginx:
+    container_name: nginx
+    working_dir: /app
+    image: nginx:stable-alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - static:/app/static
+      - media:/app/media
+      - ./docker/nginx/prod/:/etc/nginx/conf.d:ro
+      - ./docker/certbot/conf:/etc/letsencrypt:ro
+      - ./docker/certbot/www:/var/www/certbot:ro
+    links:
+      - django
+    depends_on:
+      - django
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./docker/certbot/conf:/etc/letsencrypt:rw
+      - ./docker/certbot/www:/var/www/certbot:rw
+    command: certonly --webroot --webroot-path=/var/www/certbot/ --email tech@remnovo.ru --agree-tos --no-eff-email -d objects.remnovo.ru -d www.objects.remnovo.ru
+    depends_on:
+      - nginx
 

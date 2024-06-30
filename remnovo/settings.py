@@ -15,7 +15,7 @@ import environ
 
 env = environ.Env()
 
-environ.Env.read_env(env_file=Path('./docker/env/.env.dev'))
+environ.Env.read_env(env_file=Path('./docker/env/.env.prod'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -145,40 +145,48 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 INTERNAL_IPS = [
-    "127.0.0.1",
+    env("INTERNAL_IPS")
 ]
 
-# LOGGING = {
-#     'version': 1,
-#     'handlers': {
-#         'console': {'class': "logging.StreamHandler"}
-#     },
-#     'loggers': {
-#         'django.db.backends': {
-#             'handlers': ['console'],
-#             'level': "DEBUG"
-#         }
-#     }
-# }
+LOGGING = {
+    'version': 1,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': '/docker/logs/app.log',
+            'maxBytes': 1024*1024*5,  # 5MB
+            'backupCount': 5,
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['file'],
+            'level': "INFO"
+        },
+    }
+}
 
 DEBUG_TOOLBAR_CONFIG = {
     'IS_RUNNING_TESTS': int(env("IS_RUNNING_TESTS", default=0))
 }
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_RENDERER_CLASSES': (
-#         'rest_framework.renderers.JSONRenderer',
-#     ),
-#     'DEFAULT_PARSER_CLASSES': (
-#         'rest_framework.parsers.JSONParser',
-#     )
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    )
+}
 
-CSRF_COOKIE_SAMESITE = 'Lax'
-SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_HTTPONLY = True
-CORS_ALLOWED_ORIGINS = [origin.strip() for origin in env("CORS_ALLOWED_ORIGINS").split(",")]
-CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in env("CSRF_TRUSTED_ORIGINS").split(",")]
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 CORS_ALLOW_CREDENTIALS = True
