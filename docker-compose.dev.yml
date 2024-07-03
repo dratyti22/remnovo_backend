@@ -12,10 +12,9 @@ services:
     restart: always
     volumes:
       - pgdata:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=qwerty
-      - POSTGRES_DB=remnovo
+    env_file:
+      - ./docker/env/.env.dev.db
+
 
   django:
     build:

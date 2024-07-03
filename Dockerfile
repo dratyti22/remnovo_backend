@@ -21,6 +21,3 @@ RUN apk del .build-deps
 
 # Копирование проекта
 COPY . .
-
-# Настройка записи и доступа
-RUN chmod -R 777 ./

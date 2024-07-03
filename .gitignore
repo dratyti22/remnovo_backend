@@ -23,7 +23,6 @@ db.sqlite3
 htmlcov/
 
 #Writerside
-Writerside/cfg
 Writerside/images
 
 #configuration
