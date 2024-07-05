@@ -57,6 +57,6 @@ services:
     volumes:
       - ./docker/certbot/conf/:/etc/letsencrypt/:rw
       - ./docker/certbot/www/:/var/www/certbot/:rw
-    command: certonly -v --webroot --webroot-path /var/www/certbot/ --email tech@remnovo.ru --agree-tos --no-eff-email -d objects.remnovo.ru
+#    command: certonly -v --webroot --webroot-path /var/www/certbot/ --email tech@remnovo.ru --agree-tos --no-eff-email -d objects.remnovo.ru
     depends_on:
       - nginx

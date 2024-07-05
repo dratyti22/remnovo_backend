@@ -1,4 +1,5 @@
 from django.urls import path
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import SimpleRouter
 
 from . import views
@@ -10,4 +11,9 @@ router.register('api/file', views.FileView)
 router.register('api/material', views.MaterialView)
 router.register('api/description/file', views.DescriptionFileView)
 
-urlpatterns = router.urls
+urlpatterns = [
+    path('api/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='docs'),
+]
+
+urlpatterns += router.urls
