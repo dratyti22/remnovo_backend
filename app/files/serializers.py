@@ -18,7 +18,7 @@ class FileSerializer(serializers.ModelSerializer):
         fields = ('filename', 'height', 'width', 'length', 'status', 'owners_id', 'materials', 'time_create')
         read_only_fields = ('time_create', "owners_id")
 
-    def get_owners_id(self, obj):
+    def get_owners_id(self, obj) -> list[int]:
         return [owner.id for owner in obj.owners.all()]
 
 
