@@ -24,3 +24,20 @@ class Customer(models.Model):
     def __str__(self):
         return f"{self.customer_id} - {self.delivery_type}"
 
+
+class Product(models.Model):
+    product_id = models.IntegerField(verbose_name="Продукт id")
+    height = models.FloatField(verbose_name='Высота')
+    width = models.FloatField(verbose_name='Ширина')
+    length = models.FloatField(verbose_name='Длина')
+    materials = models.TextField(verbose_name="Материал")
+    deadlines = models.TextField(verbose_name="Сроки выполнения")
+    delivery_terms = models.TextField(verbose_name="Сроки доставки")
+
+    class Meta:
+        db_table = "order_product"
+        verbose_name='Продукт'
+        verbose_name_plural="Продукты"
+
+    def __str__(self):
+        return f"{self.product_id}"
