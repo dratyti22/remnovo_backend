@@ -1,6 +1,6 @@
 import json
 
-from django.contrib.auth.models import User
+from app.users.models import CustomUser
 from django.db.models import F
 from django.urls import reverse
 from rest_framework import status
@@ -11,8 +11,8 @@ from app.files.serializers import TagsSerializer
 
 class ApiTagsSerializerTestCase(APITestCase):
     def setUp(self):
-        self.user = User.objects.create(username='test_user1', is_staff=True)
-        self.user2 = User.objects.create(username='test_user2', is_staff=True)
+        self.user = CustomUser.objects.create(username='test_user1', roles_id=10)
+        self.user2 = CustomUser.objects.create(username='test_user2', roles_id=10)
 
         self.tag1 = Tags.objects.create(user=self.user2, name='tag2', section=True)
         self.tag2 = Tags.objects.create(user=self.user, name='tag3', section=True, parent=self.tag1)
@@ -26,9 +26,9 @@ class ApiTagsSerializerTestCase(APITestCase):
         self.assertEqual(serializer_data, response.data)
 
     # def test_get_one(self):
-    #     url = reverse("Tags-detail", args=(self.company1.id,))
+    #     url = reverse("Tags-detail", args=(self.company1.user_id,))
     #     response = self.client.get(url)
-    #     tag = Tags.objects.filter(id=self.company1.id).annotate(
+    #     tag = Tags.objects.filter(user_id=self.company1.user_id).annotate(
     #         first_name=F("user__first_name"),
     #         last_name=F("user__last_name"),
     #     )
@@ -39,7 +39,7 @@ class ApiTagsSerializerTestCase(APITestCase):
     # def test_get_search(self):
     #     url = reverse("tags-list")
     #     response = self.client.get(url, data={'search': 'test_company'})
-    #     tag = Tags.objects.filter(id__in=[self.company1.id, self.company2.id]).annotate(
+    #     tag = Tags.objects.filter(user_id__in=[self.company1.user_id, self.company2.user_id]).annotate(
     #         first_name=F("user__first_name"),
     #         last_name=F("user__last_name"),
     #     )
@@ -49,7 +49,7 @@ class ApiTagsSerializerTestCase(APITestCase):
     #     self.assertEqual(serializer_data, response.data)
 
     def test_post(self):
-        user3 = User.objects.create(username='test_user3', is_staff=True)
+        user3 = CustomUser.objects.create(username='test_user3', roles_id=5)
         self.assertEqual(2, Tags.objects.all().count())
 
         url = reverse("tags-list")
@@ -70,7 +70,7 @@ class ApiTagsSerializerTestCase(APITestCase):
     def test_put(self):
         url = reverse("tags-detail", args=(self.tag1.id,))
         data = {
-            'id': self.tag1.id,
+            'user_id': self.tag1.id,
             "user": self.user2.id,
             "section": True,
             "name": "faf",

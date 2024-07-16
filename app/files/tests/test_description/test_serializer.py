@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from app.users.models import CustomUser
 from django.db.models import F
 from rest_framework.test import APITestCase
 
@@ -8,8 +8,8 @@ from app.files.serializers import DescriptionFileSerializer
 
 class ProductSerializersTestCase(APITestCase):
     def setUp(self):
-        self.user1 = User.objects.create(username='user1')
-        self.user2 = User.objects.create(username='user2')
+        self.user1 = CustomUser.objects.create(username='user1')
+        self.user2 = CustomUser.objects.create(username='user2')
 
         self.tag1 = Tags.objects.create(user=self.user2, name='tag2', section=True, time_create=1718613878)
         self.tag2 = Tags.objects.create(user=self.user1, name='tag3', section=True, parent=self.tag1,

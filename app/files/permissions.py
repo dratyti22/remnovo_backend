@@ -11,6 +11,9 @@ class TagsIsStaffOrRead(BasePermission):
     '''
 
     def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.roles_id == 10:
+            return True
+
         if request.method == 'POST':  # Создавать
             return request.user.roles_id == 5
         elif request.method == 'PUT' or request.method == 'PATCH':  # Обновлять
@@ -24,11 +27,14 @@ class TagsIsStaffOrRead(BasePermission):
 
 class FilePermission(BasePermission):
     def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.roles_id == 10:
+            return True
+
         if request.method in SAFE_METHODS:
             return True
 
         if request.method == "POST":
-            if request.user.is_authenticated or request.user.roles_id == 10:
+            if request.user.is_authenticated:
                 return True
             return False
 
@@ -49,6 +55,9 @@ class FilePermission(BasePermission):
 
 class IsAuthorizedOrWorker(BasePermission):
     def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.roles_id == 10:
+            return True
+
         if request.method in SAFE_METHODS:
             return True
         return request.user.is_authenticated and request.user.roles_id == 5
@@ -58,6 +67,9 @@ class IsAuthorOrStaff(BasePermission):
     DANGEROUS_METHODS = ("PUT", "PATCH", "DELETE")
 
     def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.roles_id == 10:
+            return True
+
         if request.method in SAFE_METHODS:
             return True
 
@@ -68,15 +80,18 @@ class IsAuthorOrStaff(BasePermission):
             return request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
+        if request.user.is_authenticated and request.user.roles_id == 10:
+            return True
+
         if request.method in SAFE_METHODS:
             return True
 
         elif request.method == "POST":
-            return request.user in obj.file.owners.all() or request.user.roles_id == 10
+            return request.user in obj.file.owners.all()
 
         elif request.method in self.DANGEROUS_METHODS:
             file_id = view.kwargs.get('pk')
             if file_id:
                 file_obj = DescriptionFile.objects.get(id=file_id)
-                return request.user == file_obj.user or request.user.roles_id == 10
+                return request.user == file_obj.user
             return False
