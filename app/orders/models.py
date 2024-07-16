@@ -58,3 +58,19 @@ class PriceProduct(models.Model):
 
     def __str__(self):
         return f"{self.price} - {self.currency}"
+
+
+class Executor(models.Model):
+    executor_id = models.IntegerField(verbose_name="Исполнитель id")
+    data_order_take = models.CharField(max_length=255, verbose_name="Дата взятия заказа")
+    order_execution_date = models.CharField(max_length=255, verbose_name="Дата исполнения по заказу")
+    actual_execution_date = models.CharField(max_length=255, verbose_name="Дата исполнения фактическая")
+
+    class Meta:
+        db_table = "order_executor"
+        verbose_name = "Исполнитель"
+        verbose_name_plural = "Исполнители"
+
+    def __str__(self):
+        return f"{self.executor_id}"
+
