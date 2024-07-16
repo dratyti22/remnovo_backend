@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 from mptt.models import MPTTModel, TreeForeignKey
 
@@ -10,7 +10,7 @@ class Tags(MPTTModel):
     time_create = models.BigIntegerField(
         verbose_name='Время добавления', blank=True
     )
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='Создатель')
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Создатель')
     section = models.BooleanField(default=False, verbose_name='Раздел')
     name = models.CharField(max_length=150, unique=True, verbose_name='Название категории')
     parent = TreeForeignKey(
@@ -58,7 +58,7 @@ class File(models.Model):
         verbose_name='Время добавления', blank=True
     )
     filename = models.CharField(max_length=500, unique=True, verbose_name="Имя файла")
-    owners = models.ManyToManyField(to=User, verbose_name='Владельцы')
+    owners = models.ManyToManyField(to=settings.AUTH_USER_MODEL, verbose_name='Владельцы')
     height = models.FloatField(verbose_name='Высота')
     width = models.FloatField(verbose_name='Ширина')
     length = models.FloatField(verbose_name='Длина')
@@ -95,7 +95,7 @@ class DescriptionFile(models.Model):
         verbose_name='Время добавления', blank=True
     )
     file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='description_file', verbose_name='File')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='User')
     title = models.CharField(max_length=300, verbose_name='Заголовок')
     description = models.TextField(verbose_name='Описание')
     line_video = models.URLField(verbose_name='Ссылка на видео')

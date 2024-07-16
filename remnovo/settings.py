@@ -148,7 +148,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# AUTH_USER_MODEL = "app.files.CustomUser"
+AUTH_USER_MODEL = "users.CustomUser"
 
 INTERNAL_IPS = [
     env("INTERNAL_IPS")
@@ -190,25 +190,25 @@ REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
     ),
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-
-    ],
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [
+    #
+    #     'rest_framework_simplejwt.authentication.JWTAuthentication',
+    #
+    # ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-SIMPLE_JWT = {
-
-    'ROTATE_REFRESH_TOKENS': True,
-
-    'BLACKLIST_AFTER_ROTATION': True,
-
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
-
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=60),
-
-}
+# SIMPLE_JWT = {
+#
+#     'ROTATE_REFRESH_TOKENS': True,
+#
+#     'BLACKLIST_AFTER_ROTATION': True,
+#
+#     'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+#
+#     'REFRESH_TOKEN_LIFETIME': timedelta(days=60),
+#
+# }
 
 CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_HTTPONLY = True

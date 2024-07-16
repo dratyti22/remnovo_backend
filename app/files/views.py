@@ -1,9 +1,5 @@
-from django.db.models import F
-from django.middleware.csrf import get_token
-from rest_framework import status
 from rest_framework.filters import SearchFilter
 from rest_framework.parsers import MultiPartParser, JSONParser, FormParser
-from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from .serializers import TagsSerializer, FileSerializer, MaterialSerializer, ImageFileSerializer, \
