@@ -36,8 +36,25 @@ class Product(models.Model):
 
     class Meta:
         db_table = "order_product"
-        verbose_name='Продукт'
-        verbose_name_plural="Продукты"
+        verbose_name = 'Продукт'
+        verbose_name_plural = "Продукты"
 
     def __str__(self):
         return f"{self.product_id}"
+
+
+class PriceProduct(models.Model):
+    price = models.FloatField(verbose_name='Цена')
+    currency = models.CharField(max_length=100, verbose_name="Валюта")
+    production_cost = models.FloatField(verbose_name="Стоимость изготовления")
+    cost_delivery = models.FloatField(verbose_name="Стоимость доставки")
+    order = models.BooleanField(default=False, verbose_name="Заказ заказан или нет")
+    margin = models.FloatField(verbose_name="Маржа")
+
+    class Meta:
+        db_table = "order_price_product"
+        verbose_name = "Цена товара"
+        verbose_name_plural = "Цена товаров"
+
+    def __str__(self):
+        return f"{self.price} - {self.currency}"
