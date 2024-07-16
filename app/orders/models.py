@@ -74,3 +74,20 @@ class Executor(models.Model):
     def __str__(self):
         return f"{self.executor_id}"
 
+
+class Delivery(models.Model):
+    where_delivery = models.CharField(max_length=255, verbose_name="Где заказчик получит свой товар")
+    DELIVERY_TYPE = [
+        (1, "Самовывоз"),
+        (2, "Курьер"),
+        (3, "Постамат"),
+    ]
+    delivery_type = models.CharField(max_length=255, verbose_name="Тип доставки", choices=DELIVERY_TYPE)
+
+    class Meta:
+        db_table = 'order_delivery'
+        verbose_name = "Доставка"
+        verbose_name_plural = "Доставки"
+
+    def __str__(self):
+        return f"{self.where_delivery} - {self.delivery_type}"
