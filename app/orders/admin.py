@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Customer, Product, PriceProduct
+from .models import Customer, Product, PriceProduct, Executor, Delivery, Order
 
 
 @admin.register(Customer)
@@ -19,3 +19,8 @@ class ProductAdmin(admin.ModelAdmin):
 class PriceProductAdmin(admin.ModelAdmin):
     list_display = ["price", 'currency']
     list_filter = ["price", "currency"]
+
+
+admin.site.register(Executor)
+admin.site.register(Delivery)
+admin.site.register(Order)
