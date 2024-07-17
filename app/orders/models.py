@@ -78,9 +78,9 @@ class Executor(models.Model):
 class Delivery(models.Model):
     where_delivery = models.CharField(max_length=255, verbose_name="Где заказчик получит свой товар")
     DELIVERY_TYPE = [
-        (1, "Самовывоз"),
-        (2, "Курьер"),
-        (3, "Постамат"),
+        ('1', "Самовывоз"),
+        ('2', "Курьер"),
+        ('3', "Постамат"),
     ]
     delivery_type = models.CharField(max_length=255, verbose_name="Тип доставки", choices=DELIVERY_TYPE)
 
@@ -95,13 +95,13 @@ class Delivery(models.Model):
 
 class Order(models.Model):
     STATUS_ORDERS = [
-        (1, "Отложенный"),
-        (2, "Ждет выбора исполнителя"),
-        (3, "В печати"),
-        (4, "Готов"),
-        (5, "Просрочен в печати"),
-        (6, "Выполнен"),
-        (7, "Отменен"),
+        ('1', "Отложенный"),
+        ('2', "Ждет выбора исполнителя"),
+        ('3', "В печати"),
+        ('4', "Готов"),
+        ('5', "Просрочен в печати"),
+        ('6', "Выполнен"),
+        ('7', "Отменен"),
     ]
     customer = models.ForeignKey(to=Customer, on_delete=models.CASCADE)
     product = models.ForeignKey(to=Product, on_delete=models.CASCADE)
