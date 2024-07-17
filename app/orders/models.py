@@ -91,3 +91,29 @@ class Delivery(models.Model):
 
     def __str__(self):
         return f"{self.where_delivery} - {self.delivery_type}"
+
+
+class Order(models.Model):
+    STATUS_ORDERS = [
+        (1, "Отложенный"),
+        (2, "Ждет выбора исполнителя"),
+        (3, "В печати"),
+        (4, "Готов"),
+        (5, "Просрочен в печати"),
+        (6, "Выполнен"),
+        (7, "Отменен"),
+    ]
+    customer = models.ForeignKey(to=Customer, on_delete=models.CASCADE)
+    product = models.ForeignKey(to=Product, on_delete=models.CASCADE)
+    price_product = models.ForeignKey(to=PriceProduct, on_delete=models.CASCADE, related_name='orders')
+    executor = models.ForeignKey(to=Executor, on_delete=models.CASCADE)
+    delivery = models.ForeignKey(to=Delivery, on_delete=models.CASCADE)
+    status_order = models.CharField(max_length=255, verbose_name="Статус", choices=STATUS_ORDERS)
+
+    class Meta:
+        db_table = "order"
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
+
+    def __str__(self):
+        return str(self.status_order)
