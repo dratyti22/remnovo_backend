@@ -7,5 +7,5 @@ from app.orders.serializers import OrderSerializer
 
 
 class OrderView(ModelViewSet):
-    queryset = Order.objects.all()
+    queryset = Order.objects.all().select_related("customer", "product", "price_product", 'executor', 'delivery')
     serializer_class = OrderSerializer
