@@ -97,7 +97,7 @@
         "delivery": {
             "id": делается овтоматически,
             "where_delivery": "string",
-            "delivery_type": "string"
+            "delivery_type": integer
         },
-        "status_order": "string"
+        "status_order": integer"
     }
