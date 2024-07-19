@@ -168,23 +168,23 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'docker/logs/app.log',
-            'maxBytes': 1024 * 1024 * 5,  # 6MB
+            'maxBytes': 1024 * 1024 * 5,  # 5MB
             'backupCount': 5,
             'formatter': 'verbose',
         },
         'debug_file': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'docker/logs/debug.log',
-            'maxBytes': 1024 * 1024 * 4,  # 5MB
+            'maxBytes': 1024 * 1024 * 4,  # 4MB
             'backupCount': 4,
             'formatter': 'verbose',
         },
         'error_file': {
             'level': 'ERROR',
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'docker/logs/error.log',
-            'maxBytes': 1024 * 1024 * 6,  # 5MB
+            'maxBytes': 1024 * 1024 * 6,  # 6MB
             'backupCount': 5,
             'formatter': 'verbose',
         }
@@ -206,7 +206,6 @@ LOGGING = {
         },
     }
 }
-
 DEBUG_TOOLBAR_CONFIG = {
     'IS_RUNNING_TESTS': int(env("IS_RUNNING_TESTS", default=0))
 }
