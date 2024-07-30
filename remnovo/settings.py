@@ -16,7 +16,7 @@ import environ
 
 env = environ.Env()
 
-environ.Env.read_env(env_file=Path('./docker/env/.env.prod'))
+environ.Env.read_env(env_file=Path('./.env'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'app.files.apps.FilesConfig',
     'app.users.apps.UsersConfig',
     'app.orders.apps.OrdersConfig',
+    "app.freelance.apps.FreelanceConfig",
 ]
 
 MIDDLEWARE = [
