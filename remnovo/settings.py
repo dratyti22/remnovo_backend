@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
-from datetime import timedelta
 from pathlib import Path
 import environ
 
@@ -226,18 +225,6 @@ REST_FRAMEWORK = {
     # ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
-
-# SIMPLE_JWT = {
-#
-#     'ROTATE_REFRESH_TOKENS': True,
-#
-#     'BLACKLIST_AFTER_ROTATION': True,
-#
-#     'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
-#
-#     'REFRESH_TOKEN_LIFETIME': timedelta(days=60),
-#
-# }
 
 CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_HTTPONLY = True
