@@ -36,6 +36,9 @@ class CustomUser(AbstractUser):
     users_status = models.IntegerField(default=0)
     token = models.CharField(max_length=255, blank=True, null=True)
     roles_id = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(10)], null=True)
+    points = models.IntegerField(default=0)
+    total_orders_placed = models.PositiveIntegerField(default=0)
+    successful_orders = models.IntegerField(default=0)
 
     groups = models.ManyToManyField(
         'auth.Group',
