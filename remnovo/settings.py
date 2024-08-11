@@ -44,8 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "django.contrib.postgres",
 
-    'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist',
     'rest_framework',
     "mptt",
     'debug_toolbar',
@@ -240,4 +238,11 @@ SPECTACULAR_SETTINGS = {
         "filter": True,
     },
     "COMPONENT_SPLIT_REQUEST": True
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': env("redis_server"),
+    }
 }
