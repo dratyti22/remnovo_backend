@@ -22,11 +22,15 @@ db.sqlite3
 .coverage
 htmlcov/
 
-#Writerside
-Writerside/images
-
-#configuration
+#Docker
 docker/
 
+#Qudona jetbrains
 .github/
 qodana.yaml
+
+#Backups bd
+backups/
+
+#Celery Beat
+celerybeat-schedule

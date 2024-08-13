@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 import environ
+from celery.schedules import crontab
 
 env = environ.Env()
 
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     'app.users.apps.UsersConfig',
     'app.orders.apps.OrdersConfig',
     "app.freelance.apps.FreelanceConfig",
+    "app.services",
 ]
 
 MIDDLEWARE = [
@@ -256,3 +258,11 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Moscow'
+
+CELERY_BEAT_SCHEDULE = {
+    'backup_database': {
+        'task': 'app.services.tasks.dbackup_task',  # Путь к задаче указанной в tasks.py
+        'schedule': crontab(hour=11, minute=41, day_of_week=2),
+        # Резервная копия будет создаваться в среду в 5 утра
+    },
+}
