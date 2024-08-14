@@ -245,12 +245,12 @@ SPECTACULAR_SETTINGS = {
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': env("redis_server"),
+        'LOCATION': env("REDIS_SERVER"),
     }
 }
 
-CELERY_BROKER_URL = env("redis_server") + '/0'
-CELERY_RESULT_BACKEND = env("redis_server") + '/0'
+CELERY_BROKER_URL = env("REDIS_SERVER") + '/0'
+CELERY_RESULT_BACKEND = env("REDIS_SERVER") + '/0'
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
@@ -262,7 +262,11 @@ CELERY_TIMEZONE = 'Europe/Moscow'
 CELERY_BEAT_SCHEDULE = {
     'backup_database': {
         'task': 'app.services.tasks.dbackup_task',  # Путь к задаче указанной в tasks.py
-        'schedule': crontab(hour=11, minute=41, day_of_week=2),
+        'schedule': crontab(hour=5, minute=0, day_of_week=3),
         # Резервная копия будет создаваться в среду в 5 утра
     },
+    "cleanup-backups": {
+        "task": 'app.services.tasks.cleanup_backups',
+        "schedule": crontab(hour=5, minute=30, day_of_week=4)
+    }
 }
