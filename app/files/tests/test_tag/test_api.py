@@ -11,8 +11,8 @@ from app.files.serializers import TagsSerializer
 
 class ApiTagsSerializerTestCase(APITestCase):
     def setUp(self):
-        self.user = CustomUser.objects.create(username='test_user1', roles_id=10)
-        self.user2 = CustomUser.objects.create(username='test_user2', roles_id=10)
+        self.user = CustomUser.objects.create(username='test_user1', roles_id=10, email='user1@example.com')
+        self.user2 = CustomUser.objects.create(username='test_user2', roles_id=10, email='user12@example.com')
 
         self.tag1 = Tags.objects.create(user=self.user2, name='tag2', section=True)
         self.tag2 = Tags.objects.create(user=self.user, name='tag3', section=True, parent=self.tag1)

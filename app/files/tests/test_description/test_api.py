@@ -12,8 +12,8 @@ from app.files.serializers import FileSerializer, DescriptionFileSerializer
 
 class ApiFileSerializerTestCase(APITestCase):
     def setUp(self):
-        self.user1 = CustomUser.objects.create(username='user1', roles_id=0)
-        self.user2 = CustomUser.objects.create(username='user2', roles_id=0)
+        self.user1 = CustomUser.objects.create(email='user1@example.com', username='user1', roles_id=0)
+        self.user2 = CustomUser.objects.create(email='user2@example.com', username='user2', roles_id=0)
 
         self.tag1 = Tags.objects.create(user=self.user2, name='tag2', section=True, time_create=1718613878)
         self.tag2 = Tags.objects.create(user=self.user1, name='tag3', section=True, parent=self.tag1,

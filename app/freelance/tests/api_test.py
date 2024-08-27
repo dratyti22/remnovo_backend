@@ -9,7 +9,7 @@ from app.users.models import CustomUser
 
 class OrderFreelanceAPITestCase(APITestCase):
     def setUp(self):
-        self.user = CustomUser.objects.create(username='test_user')
+        self.user = CustomUser.objects.create(username='test_user', email='user1@example.com')
         self.order1 = OrderFreelanceModel.objects.create(
             order=1,
             customer=self.user,

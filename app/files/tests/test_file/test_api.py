@@ -15,8 +15,8 @@ class ApiFileSerializerTestCase(APITestCase):
         self.material1 = Material.objects.create(name='m1', description='m1')
         self.material2 = Material.objects.create(name='m2', description='m2')
         self.material3 = Material.objects.create(name='m3', description='m3')
-        self.user = CustomUser.objects.create(username='test_user1')
-        self.user2 = CustomUser.objects.create(username='test_user2')
+        self.user = CustomUser.objects.create(username='test_user1', email='user1@example.com')
+        self.user2 = CustomUser.objects.create(username='test_user2', email='user2@example.com')
 
         self.file1 = File.objects.create(filename='n', height=45, width=34, length=23, status=1)
         self.file1.owners.set([self.user2])

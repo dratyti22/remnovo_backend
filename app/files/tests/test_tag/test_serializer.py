@@ -8,8 +8,8 @@ from app.users.models import CustomUser
 
 class ProductSerializersTestCase(APITestCase):
     def setUp(self):
-        self.user = CustomUser.objects.create(username='test_user1')
-        self.user2 = CustomUser.objects.create(username='test_user2')
+        self.user = CustomUser.objects.create(username='test_user1', email='user1@example.com')
+        self.user2 = CustomUser.objects.create(username='test_user2', email='user12@example.com')
 
         self.tag1 = Tags.objects.create(user=self.user2, name='tag2', section=True, time_create=1718613878)
         self.tag2 = Tags.objects.create(user=self.user, name='tag3', section=True, parent=self.tag1,

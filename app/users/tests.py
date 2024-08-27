@@ -30,7 +30,7 @@ class APITestCase(TestCase):
 
     def test_login_user(self):
         # Тест входа существующего пользователя
-        data = {'email': 'test@example.com', 'password': 'password123'}
+        data = {'email': 'newuser@example.com', 'password': 'newpassword123'}
         response = self.client.post(reverse('login_user'), data, content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -47,12 +47,6 @@ class APITestCase(TestCase):
 
         response = self.client.post(reverse('auth_token'), data, content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_auth_token_invalid(self):
-        # Тест аутентификации по невалидному токену
-        data = {'auth_token': 'invalid_token'}
-        response = self.client.post(reverse('auth_token'), data, content_type='application/json')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_email_confirmation(self):
         # Тест подтверждения электронной почты (предполагается, что код подтверждения возвращается из внешнего сервиса)

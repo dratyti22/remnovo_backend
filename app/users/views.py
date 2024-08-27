@@ -68,7 +68,7 @@ class AuthTokenView(APIView):
             login(request, user)
             return Response({"message": "Login successfully"}, status=status.HTTP_200_OK)
         else:
-            return Response({'error': 'Auth token verified successfully'}, status=status.HTTP_200_OK)
+            return Response({'error': 'Auth token verified successfully'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class EmailConfirmationView(APIView):
