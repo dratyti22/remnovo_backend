@@ -64,7 +64,8 @@ class AuthTokenView(APIView):
         params = {'auth_token': auth_token}
         response = requests.post(url, params=params)
         if response.status_code == 200:
-            login(request, request.user)
+            user = CustomUser.objects.get(token=auth_token)
+            login(request, user)
             return Response({"message": "Login successfully"}, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Auth token verified successfully'}, status=status.HTTP_200_OK)
@@ -79,7 +80,13 @@ class EmailConfirmationView(APIView):
         params = {'code': code}
         response = requests.post(url, params=params)
         if response.status_code == 200:
-            login(request, request.user)
-            return Response({'message': 'Email confirmed successfully'}, status=status.HTTP_200_OK)
+            data = response.json()
+            token = data["this_user"]["auth_token"]
+            if len(token)!= 0:
+                user = CustomUser.objects.get(token=token)
+                login(request, user)
+                return Response({'message': 'Email confirmed successfully'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Email is already activated'}, status=status.HTTP_401_UNAUTHORIZED)
         else:
-            return Response({'error': 'Failed to confirm email'}, status=status.HTTP_200_OK)
+            return Response({'error': 'Failed to confirm email'}, status=status.HTTP_400_BAD_REQUEST)
