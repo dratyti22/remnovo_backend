@@ -56,8 +56,6 @@ api:
     
     /user/login?email=...&password=...
 
-token сохраняется в бд
-
 Если прошло успешно, пользователя авторезировается и возвращается:
 ```Python
 {'message': 'User logged in successfully'}, HTTP_200_OK
