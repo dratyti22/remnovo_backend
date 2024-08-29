@@ -6,6 +6,7 @@
                  name="Documation"
                  start-page="Tags.md">
 
+    <toc-element topic="User.md"/>
     <toc-element topic="Freelance.md"/>
     <toc-element topic="Order.md"/>
     <toc-element topic="File.md"/>
