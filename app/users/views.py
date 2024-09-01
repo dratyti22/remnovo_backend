@@ -84,6 +84,8 @@ class EmailConfirmationView(APIView):
             token = data["this_user"]["auth_token"]
             if len(token)!= 0:
                 user = CustomUser.objects.get(token=token)
+                user.is_active = True
+                user.save()
                 login(request, user)
                 return Response({'message': 'Email confirmed successfully'}, status=status.HTTP_200_OK)
             else:

@@ -15,6 +15,16 @@ services:
     env_file:
       - ./docker/env/.env.prod.db
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    env_file:
+      - docker/env/.env.prod
+    expose:
+      - 6379
+    volumes:
+      - ./docker/redis/data:/data
+
   django:
     build:
       context: .
@@ -29,8 +39,7 @@ services:
       - media:/app/media
     depends_on:
       - db
-    command: sh -c "python manage.py collectstatic --no-input && python manage.py makemigrations && python manage.py migrate && gunicorn --workers=4 --reload --max-requests=1000 remnovo.wsgi -b 0.0.0.0:8000"
-
+    command: sh -c "python manage.py collectstatic --no-input && python manage.py makemigrations && python manage.py migrate && gunicorn --workers=4 --reload remnovo.wsgi -b 0.0.0.0:8000"
 
   nginx:
     container_name: nginx
@@ -57,6 +66,31 @@ services:
     volumes:
       - ./docker/certbot/conf/:/etc/letsencrypt/:rw
       - ./docker/certbot/www/:/var/www/certbot/:rw
-    command: certonly -v --webroot --webroot-path /var/www/certbot/ --email tech@remnovo.ru --agree-tos --no-eff-email -d objects.remnovo.ru
+    #    command: certonly -v --webroot --webroot-path /var/www/certbot/ --email tech@remnovo.ru --agree-tos --no-eff-email -d objects.remnovo.ru
     depends_on:
       - nginx
+
+  celery-worker:
+    build: .
+    container_name: celery-worker
+    restart: always
+    env_file:
+      - docker/env/.env.prod
+    volumes:
+      - ./:/app
+      - media:/app/media
+    command: celery -A remnovo worker --loglevel=info --logfile=./docker/logs/celery-worker.log
+    depends_on:
+      - redis
+
+  celery-beat:
+    build: .
+    container_name: celery-beat
+    env_file:
+      - docker/env/.env.prod
+    depends_on:
+      - redis
+    command: celery -A remnovo beat --loglevel=info --logfile=./docker/logs/celery-beat.log
+    volumes:
+      - media:/app/media
+      - ./:/app
