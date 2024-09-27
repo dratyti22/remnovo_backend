@@ -1,4 +1,5 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin
 
 from .models import Material, File, DescriptionFile, ImageFile, Tags
 
@@ -6,18 +7,18 @@ from mptt.admin import DraggableMPTTAdmin
 
 
 @admin.register(Material)
-class MaterialAdmin(admin.ModelAdmin):
+class MaterialAdmin(ModelAdmin):
     pass
 
 
 @admin.register(File)
-class FileAdmin(admin.ModelAdmin):
+class FileAdmin(ModelAdmin):
     list_display = ("filename", 'height', 'width', 'length', 'status')
     list_editable = ('height', 'width', 'length', 'status')
 
 
 @admin.register(DescriptionFile)
-class DescriptionFileAdmin(admin.ModelAdmin):
+class DescriptionFileAdmin(ModelAdmin):
     list_display = ['file_name', 'user_username', 'title']
 
     def file_name(self, obj):
@@ -29,7 +30,7 @@ class DescriptionFileAdmin(admin.ModelAdmin):
 
 
 @admin.register(ImageFile)
-class ImageFileAdmin(admin.ModelAdmin):
+class ImageFileAdmin(ModelAdmin):
     list_display = ['description_file', 'image']
 
     def description_file(self, obj):
