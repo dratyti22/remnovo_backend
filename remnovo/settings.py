@@ -16,7 +16,7 @@ from celery.schedules import crontab
 
 env = environ.Env()
 
-environ.Env.read_env(env_file=Path('./.env'))
+environ.Env.read_env(env_file=Path('./docker/env/.env.dev'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -226,11 +226,11 @@ AUTHENTICATION_BACKENDS = [
     'app.users.backends.UserModelBackend'
 ]
 
-CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False
 SESSION_COOKIE_HTTPONLY = True
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = ["https://objects.remnovo.ru"]
+CORS_ALLOW_ALL_OPTIONS = True
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Remnovo API",

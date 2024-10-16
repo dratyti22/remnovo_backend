@@ -3,10 +3,6 @@ volumes:
   static:
   media:
 
-networks:
-  app-network:
-    driver: bridge
-
 services:
   db:
     image: postgres:alpine
@@ -26,12 +22,13 @@ services:
       - 6379
     volumes:
       - ./docker/redis/data:/data
+    user: redis
 
   django:
     build:
       context: .
-    ports:
-      - '8000:8000'
+    expose:
+      - 8000
     container_name: django
     env_file:
       - ./docker/env/.env.dev
@@ -43,8 +40,6 @@ services:
       - db
       - redis
     command: sh -c  "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-    networks:
-      - app-network
 
   nginx:
     container_name: nginx
@@ -52,7 +47,7 @@ services:
     image: nginx:stable-alpine
     restart: always
     ports:
-      - "80:80"
+      - "81:80"
     volumes:
       - static:/app/static
       - media:/app/media
@@ -74,8 +69,6 @@ services:
     command: celery -A remnovo worker --loglevel=info --logfile=./docker/logs/celery-worker.log
     depends_on:
       - redis
-    networks:
-      - app-network
 
   celery-beat:
     build: .
@@ -88,5 +81,3 @@ services:
     volumes:
       - media:/app/media
       - ./:/app
-    networks:
-      - app-network
